@@ -1,10 +1,9 @@
 # API Documentation
 
+
 ## Tổng quan
 Tổng quan về xây dựng các API cho việc xác thực, quản lý người dùng và thanh toán.
 
-
----
 
 ### Hiện thực API về xác thực Authentication
 
@@ -114,9 +113,8 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
   - **200**: token đã được vô hiệu hóa thành công
   - **400**: Token không được cung cấp
 
----
 
-## Hiện thực API về admin management
+### Hiện thực API về admin management
 
 #### 1. Lấy thông tin tổng quát về tất cả user
 - **Mô tả**: Quản trị viên có thể truy xuất danh sách tất cả người dùng trong hệ thống. Trả về thông tin cơ bản về mỗi người dùng.
@@ -198,6 +196,7 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
 
 #### 7. Xóa tài khoản người dùng
 
+
 - **Mô tả**: Xóa một người dùng khỏi hệ thống bằng cách cung cấp ID người dùng. Người dùng sẽ bị xóa vĩnh viễn khỏi cơ sở dữ liệu.
 - **Method**: DELETE
 - **Endpoint**: `/api/v1/admin/user/{user_id}`
@@ -209,3 +208,42 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
   - **403**: Token không hợp lệ (không phải admin).
   - **404**: Không tìm thấy user với id cung cấp.
   - **500**: Lỗi server.
+
+## Đánh giá dự án
+
+### Những cái làm được:
+
+- Xây dựng các API cho người dùng sử dụng hệ thống cơ bản (register, login, xem/chỉnh sửa profile, xem lịch sử nâng cấp VIP,...).
+- Sử dụng JWT token để phân quyền người dùng.
+- Sử dụng API test của MoMo để phục vụ quá trình thanh toán.
+- Gửi email OTP reset password (có thời hạn ngắn: 5 phút) cho người dùng thông qua MAILJET.
+- Có các API cho việc quản lý người dùng.
+- Hash những thông tin nhạy cảm trước khi lưu vào database (password, OTP,...).
+- Ràng buộc các đầu vào như trường email, username, password, phone number,...
+- Có hỗ trợ login dùng `id_token` của Google.
+- Tách các hàm hỗ trợ ra một package riêng.
+- Sử dụng interface để kết nối với cơ sở dữ liệu nhằm hỗ trợ viết unit test dễ dàng hơn và tăng tính linh hoạt khi cần thay đổi hệ quản trị cơ sở dữ liệu (DBMS).
+- Có tích hợp Swagger trong việc xây dựng API docs.
+- Tạo một hàm `AuthMiddleware` để kiểm tra phân quyền người dùng mà không cần phải kiểm tra quyền nhiều lần tại các endpoint.
+- Khi đăng xuất, hủy token hiện tại để vô hiệu hóa phiên làm việc của người dùng.
+- Có triển khai các unit test.
+- In ra các trường hợp gây lỗi nếu có.
+- Các secret key được đưa vào file `.env`.
+- Tự động nếu giao dịch bị hết hạn, đơn hàng sẽ được cập nhật về “failed”.
+- Có hỗ trợ kiểm tra trạng thái giao dịch để cập nhật VIP cho người dùng.
+
+### Những cái chưa làm được:
+
+- Chưa giới hạn lại số lần đăng nhập thất bại (security).
+- Chưa hỗ trợ phân trang và lọc dữ liệu khi lấy danh sách thông tin người dùng hoặc tất cả giao dịch.
+- Khi admin xóa tài khoản người dùng, chưa lưu lại hành động xóa để kiểm tra tài khoản khi cần thiết.
+- MoMo khi test chưa có redirect lại trang web của hệ thống.
+- MoMo API chưa thể sử dụng trong tài khoản thực tế của doanh nghiệp, chỉ dừng lại ở mức test với các dữ liệu ảo trong giai đoạn phát triển (development).
+- Chưa thể xác thực số điện thoại có phải người dùng thật không bằng cách gửi OTP SMS về số điện thoại.
+- Tuy đã áp dụng interface nhưng việc sử dụng interface vẫn chưa thực sự hiệu quả do chưa có nhiều kinh nghiệm.
+- Thiếu một số API khác (như khôi phục dữ liệu hệ thống, tính doanh thu theo thời gian, chưa thể thống kê hệ thống (statistics) dành cho admin).
+- Unit test chưa hoàn thiện và chuẩn xác, bao quát hết 100% ở một số endpoint.
+- Phần code hiện tại vẫn còn nhiều điểm chưa tối ưu, như cấu trúc chưa thực sự chặt chẽ, xử lý lỗi chưa đồng bộ,...
+
+
+
