@@ -4,7 +4,7 @@
 ## Tổng quan
 Tổng quan về xây dựng các API cho việc xác thực, quản lý người dùng và thanh toán.
 
-
+---
 ### I. Hiện thực API về xác thực Authentication
 
 #### 1. Đăng ký tài khoản người dùng
@@ -113,7 +113,7 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
   - **200**: token đã được vô hiệu hóa thành công
   - **400**: Token không được cung cấp
 
-
+---
 ### II. Hiện thực API về admin management
 
 #### 1. Lấy thông tin tổng quát về tất cả user
@@ -208,6 +208,178 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
   - **403**: Token không hợp lệ (không phải admin).
   - **404**: Không tìm thấy user với id cung cấp.
   - **500**: Lỗi server.
+
+---
+
+### III. Hiện thực API về user management
+
+#### 1. Xem thông tin tài khoản
+- **Mô tả**: hiển thị thông tin tài khoản người dùng hiện tại qua xác thực token.
+- **Method**: GET
+- **Endpoint**: `/api/v1/user/me`
+- **Authorization**: `token_string`
+- **Responses**:
+  - **200**: trả về thông tin tài khoản người dùng
+  - **401**: token không hợp lệ
+  - **404**: không tìm thấy người dùng
+  - **500**: lỗi server
+
+
+#### 2. Chỉnh sửa thông tin tài khoản người dùng
+- **Mô tả**: Cho phép người dùng cập nhật thông tin hồ sơ của họ như tên, tên người dùng, số điện thoại, ảnh đại diện, tiểu sử và ngày sinh.
+- **Method**: PUT
+- **Endpoint**: `/api/v1/user/me`
+- **Authorization**: `token_string`
+- **Request Body**:
+```json
+{
+  "avatar": "https://example.com/avatar.jpg",
+  "bio": "Software Engineer",
+  "dateOfBirth": "2000-01-01",
+  "name": "John Doe",
+  "phone": "+8434567890",
+  "username": "johndoe123"
+}
+```
+- **Responses**:
+  - **200**: Chỉnh sửa thông tin tài khoản thành công.
+  - **400**: Request body không hợp lệ. 
+  - **401**: token không hợp lệ
+  - **404**: không tìm thấy người dùng
+  - **500**: lỗi server
+
+#### 3. Đổi password
+- **Mô tả**: cho phép người dùng được xác thực thay đổi mật khẩu của họ bằng cách cung cấp mật khẩu hiện tại và mật khẩu mới.
+- **Method**: PUT
+- **Endpoint**: `/api/v1/user/me/change_password`
+- **Authorization**: `token_string`
+- **Request Body**:
+```json
+{
+  "current_password": "string",
+  "new_password": "string"
+}
+```
+- **Responses**:
+  - **200**: đổi mật khẩu người dùng thành công
+  - **400**: mật khẩu không đúng định dạng
+  - **401**: mật khẩu cũ không chính xác
+  - **404**: người dùng không tồn tại
+  - **500**: lỗi server
+
+#### 4. Đổi email
+- **Mô tả**: Cho phép người dùng đã xác thực thay đổi địa chỉ email của họ bằng cách cung cấp email.
+- **Method**: PUT
+- **Endpoint**: `/api/v1/user/me/change_email`
+- **Authorization**: `token_string`
+- **Request Body**:
+```json
+{
+  "email": "string"
+}
+```
+- **Responses**:
+  - **200**: đổi email người dùng thành công
+  - **400**: email không đúng định dạng
+  - **401**: Token không hợp lệ
+  - **409**: Email đã tồn tại
+  - **500**: Lỗi server
+
+#### 5. Xem lịch sử nâng cấp VIP
+- **Mô tả**: trả về lịch sử thanh toán của người dùng hiện tại được xác thực bằng token.
+- **Method**: GET
+- **Endpoint**: `api/v1/user/me/payment-history`
+- **Authorization**: `token_string`
+- **Responses**:
+  - **200**: trả về lịch sử các lần nâng cấp Vip của người dùng
+  - **401**: Token không hợp lệ
+  - **500**: Lỗi server
+
+#### 6. Xóa tài khoản người dùng nếu ngưng sử dụng
+- **Mô tả**: Cho phép người dùng xóa tài khoản của chính họ.
+- **Method**: DELETE
+- **Endpoint**: `/api/v1/user/me`
+- **Authorization**: `token_string`
+- **Responses**:
+  - **200**: Xóa tài khoản người dùng thành công
+  - **400**: User id không hợp lệ hoặc thiếu user_id.
+  - **401**: Token không hợp lệ
+  - **404**: User không tồn tại
+  - **500**: Lỗi server
+
+---
+
+### IV. Hiện thực API về Payment
+#### 1. Tạo link payment MoMo
+- **Mô tả**: tạo yêu cầu thanh toán MoMo để nâng cấp cấp VIP của người dùng.
+- **Method**: POST
+- **Endpoint**: `/api/v1/payment/vip-upgrade`
+- **Authorization**: `token_string`
+- **Request Body**:
+```json
+{
+  "amount": "number",
+  "vip_level": "string"
+}
+```
+- **Responses**:
+  - **200**: tạo yêu cầu thanh toán thành công và trả về thông tin order_id và payment url.
+  - **400**: Request body không hợp lệ
+  - **401**: Token không hợp lệ
+  - **500**: lỗi server
+
+#### 2. MoMo Instant Payment Notification (IPN) API Documentation
+- **Mô tả**: Chức năng **Instant Payment Notification (IPN)** cho MoMo dùng để xử lý callback từ MoMo sau khi giao dịch thanh toán được thực hiện.
+- **Method**: POST
+- **Endpoint**: `/api/v1/payment/momo-callback`
+- **Request Body**: Dữ liệu callback IPN của MoMo theo tài liệu MoMo API.
+Các tham số trong query string của `redirectUrl`:
+
+```
+redirectUrl?{your_parameters}&partnerCode=$partnerCode&orderId=$orderId
+&requestId=$requestId&amount=$amount&orderInfo=$orderInfo
+&orderType=momo_wallet&transId=$transId&resultCode=$resultCode
+&message=$message&payType=$payType&responseTime=$responseTime
+&extraData=$extraData&signature=$signature
+```
+Nguồn: Cổng thanh toán MoMo (AIO v2).
+- **Response**:
+  - **200**: Phản hồi MoMo callback thành công và BE gửi lại response về cho MoMo.
+  ```json
+  {
+    "extraData": "string",
+    "message": "string",
+    "orderId": "string",
+    "partnerCode": "string",
+    "requestId": "string",
+    "responseTime": "string",
+    "resultCode": "string",
+    "signature": "string"
+  }
+  ```
+  - **400**: Request payload không hợp lệ.
+  - **401**: Signature không hợp lệ.
+
+#### 3. Kiểm tra trạng thái của payment.
+- **Mô tả**: kiểm tra trạng thái của payment và nâng cấp độ vip của user nếu thanh toán thành công.
+- **Method**: POST
+- **Endpoint**: `/api/v1/payment/status`
+- **Authorization**: `token_string`
+- **Request Body**:
+```json
+{
+  "orderID": "string",
+  "requestID": "string",
+  "lang": "string"
+}
+```
+- **Responses**:
+  - **200**: xác nhận thành toán thành công và cập nhật VIP mới cho người dùng, trả về token mới cho người dùng nếu token là của người dùng.
+  - **400**: thiếu các tham số yêu cầu
+  - **403**: token không phải của admin hay của người dùng có mã orderID đó
+  - **404**: order không tìm thấy
+  - **500**: lỗi server
+---
 
 ## Đánh giá dự án
 
