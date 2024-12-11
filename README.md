@@ -402,6 +402,7 @@ Nguồn: Cổng thanh toán MoMo (AIO v2).
 - In ra các trường hợp gây lỗi nếu có.
 - Các secret key được đưa vào file `.env`.
 - Tự động nếu giao dịch bị hết hạn, đơn hàng sẽ được cập nhật về “failed”.
+- Trước khi tạo link payment MoMo, có kiểm tra đối chiếu số tiền nâng cấp VIP tùy theo mức độ đã được quy định trước đó.
 - Có hỗ trợ kiểm tra trạng thái giao dịch để cập nhật VIP cho người dùng.
 
 ### II. Những cái chưa làm được:
