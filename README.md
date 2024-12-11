@@ -5,7 +5,7 @@
 Tổng quan về xây dựng các API cho việc xác thực, quản lý người dùng và thanh toán.
 
 
-### Hiện thực API về xác thực Authentication
+### I. Hiện thực API về xác thực Authentication
 
 #### 1. Đăng ký tài khoản người dùng
 - **Mô tả**: Cho phép người dùng đăng ký bằng tên người dùng, mật khẩu, email và số điện thoại (tùy chọn).
@@ -114,7 +114,7 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
   - **400**: Token không được cung cấp
 
 
-### Hiện thực API về admin management
+### II. Hiện thực API về admin management
 
 #### 1. Lấy thông tin tổng quát về tất cả user
 - **Mô tả**: Quản trị viên có thể truy xuất danh sách tất cả người dùng trong hệ thống. Trả về thông tin cơ bản về mỗi người dùng.
@@ -211,7 +211,7 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
 
 ## Đánh giá dự án
 
-### Những cái làm được:
+### I. Những cái làm được:
 
 - Xây dựng các API cho người dùng sử dụng hệ thống cơ bản (register, login, xem/chỉnh sửa profile, xem lịch sử nâng cấp VIP,...).
 - Sử dụng JWT token để phân quyền người dùng.
@@ -232,7 +232,7 @@ Tổng quan về xây dựng các API cho việc xác thực, quản lý ngườ
 - Tự động nếu giao dịch bị hết hạn, đơn hàng sẽ được cập nhật về “failed”.
 - Có hỗ trợ kiểm tra trạng thái giao dịch để cập nhật VIP cho người dùng.
 
-### Những cái chưa làm được:
+### II. Những cái chưa làm được:
 
 - Chưa giới hạn lại số lần đăng nhập thất bại (security).
 - Chưa hỗ trợ phân trang và lọc dữ liệu khi lấy danh sách thông tin người dùng hoặc tất cả giao dịch.
