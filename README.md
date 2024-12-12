@@ -1,5 +1,8 @@
 # API Admin Documentation
 
+- [Tổng quan](#tổng-quan)
+  - [I. Hiện thực API về xác thực Authentication](#i-hiện-thực-api-về-xác-thực-authentication)
+- [Đánh giá dự án](#đánh-giá-dự-án)
 
 ## Tổng quan
 Tổng quan về xây dựng các API cho việc xác thực, quản lý người dùng và thanh toán.
