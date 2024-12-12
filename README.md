@@ -1,7 +1,10 @@
 # API Admin Documentation
 
 - [Tổng quan](#tổng-quan)
-  - [I. Hiện thực API về xác thực Authentication](#i-hiện-thực-api-về-xác-thực-authentication)
+  - [Hiện thực API về xác thực Authentication](#i-hiện-thực-api-về-xác-thực-authentication)
+  - [Hiện thực API về Admin Management](#ii-hiện-thực-api-về-admin-management)
+  - [Hiện thực API về User Management](#iii-hiện-thực-api-về-user-management)
+  - [Hiện thực API về Payment](#iv-hiện-thực-api-về-payment)
 - [Đánh giá dự án](#đánh-giá-dự-án)
 
 ## Tổng quan
